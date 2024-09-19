@@ -1,0 +1,6 @@
+
+Vytvoření vyhledávacího enginu pro e-commerce platformu XYZ, který bude využívat technologie umělé inteligence (AI) a strojového učení (ML) ke zlepšení přesnosti a relevance výsledků vyhledávání produktů. Dataset bude obsahovat základní informace o produktech, jako jsou název, popis, parametry (barva, velikost, materiál), kategorie, cena a uživatelská hodnocení. Tento dataset bude poskytnut ve formátu CSV s minimálně deseti záznamy a bude možné jej upravovat dle potřeby.
+
+Vyhledávací engine by měl umožňovat fulltextové vyhledávání, které zajistí rychlé prohledávání textových dat o produktech. Pomocí strojového učení bude systém schopen porozumět významu uživatelských dotazů a popisů produktů, klasifikovat produkty do příslušných kategorií a zlepšit relevanci výsledků vyhledávání pomocí algoritmů pro hodnocení (ranking). Kromě toho bude systém doporučovat produkty na základě uživatelského chování a historie jejich interakcí s webovými stránkami.
+
+Architektura systému bude zahrnovat backend pro indexaci a vyhledávání produktů a frontend, který umožní uživatelům zadávat dotazy a prohlížet výsledky. Bude potřeba zahrnout technologie pro zpracování a čištění dat, správu a ukládání produktových indexů a zajistit komunikaci mezi backendem a frontendem. Důležité je také vybrat vhodné technologie pro backend, frontend a knihovny pro strojové učení a AI.
