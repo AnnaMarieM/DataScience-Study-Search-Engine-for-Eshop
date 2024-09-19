@@ -1,6 +1,6 @@
 Adresář obsahuje:
 
-	- Case_Study_Minarovicova: teoretickou case study zadaného problému
+	- Case_Study: teoretickou case study zadaného problému
 
 	- eshop.py: základní implementaci vyhledávacího enginu v Pythonu, možné rozběhnout v command prompt, jupyteru,...
 
