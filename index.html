@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Search</title>
+    <!-- Include Google Fonts Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Custom CSS for Night Mode -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .input-group .form-control {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #444;
+        }
+        .input-group .form-control::placeholder {
+            color: #888;
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+        }
+        .btn-primary:hover {
+            background-color: #1558b0;
+            border-color: #1558b0;
+        }
+        /* Additional styles for store items */
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #444;
+            margin-bottom: 20px;
+        }
+        .card .card-title,
+        .card .card-text {
+            color: #ffffff;
+        }
+        .card .price {
+            color: #1a73e8;
+            font-weight: bold;
+        }
+        .rating {
+            color: #ffcc00;
+        }
+        /* Styles for Add to Cart button */
+        .btn-secondary {
+            background-color: #333;
+            border-color: #555;
+            color: #ffffff;
+        }
+        .btn-secondary:hover {
+            background-color: #444;
+            border-color: #666;
+        }
+        .fa-shopping-cart {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Product Search</h1>
+        <form id="search-form" class="mt-5">
+            <div class="input-group">
+                <input type="text" id="search-query" class="form-control" placeholder="Enter your query" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="mt-5">
+            <h2>Store Items</h2>
+            <div class="row" id="store-items">
+                <!-- Search results will be displayed here -->
+            </div>
+        </div>
+    </div>
+    <!-- Include Bootstrap JS and jQuery (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- JavaScript Functions -->
+    <script>
+        // Event listener for form submission
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            clearResults();         // Clear existing results
+            search();               // Perform search and display new results
+        });
+
+        // Function to clear displayed items
+        function clearResults() {
+            document.getElementById('store-items').innerHTML = '';
+        }
+
+        // Function to perform search and fetch results from backend
+        function search() {
+            var query = document.getElementById('search-query').value;
+            // Send POST request to backend server
+            fetch('http://localhost:8080/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
+            });
+        }
+
+        // Function to display search results
+        function displayResults(results) {
+            var container = document.getElementById('store-items');
+            if (results.length === 0) {
+                // Display message if no results found
+                var noResults = document.createElement('p');
+                noResults.textContent = 'No items found.';
+                container.appendChild(noResults);
+                return;
+            }
+            results.forEach(function(item) {
+                // Create column
+                var col = document.createElement('div');
+                col.className = 'col-md-4';
+
+                // Create card
+                var card = document.createElement('div');
+                card.className = 'card';
+
+                // Create card body
+                var cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                // Create title
+                var title = document.createElement('h5');
+                title.className = 'card-title';
+                title.textContent = item['názov'];
+
+                // Create description
+                var description = document.createElement('p');
+                description.className = 'card-text';
+                description.textContent = item['popis'];
+
+                // Create price
+                var price = document.createElement('p');
+                price.className = 'price';
+                price.textContent = '€' + parseFloat(item['cena']).toFixed(2);
+
+                // Extract rating from 'recenzie' field
+                var ratingText = item['recenzie']; // e.g., "recenzie 7 z 10"
+                var ratingMatch = ratingText.match(/(\d+)\s*z\s*10/);
+                var ratingValue = ratingMatch ? ratingMatch[1] : 'N/A';
+
+                // Create rating
+                var rating = document.createElement('p');
+                rating.className = 'rating';
+                rating.textContent = 'Rating: ' + ratingValue + '/10';
+
+                // Create "Add to Cart" button
+                var button = document.createElement('button');
+                button.className = 'btn btn-secondary mt-2';
+                button.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
+
+                // Append elements
+                cardBody.appendChild(title);
+                cardBody.appendChild(description);
+                cardBody.appendChild(price);
+                cardBody.appendChild(rating);
+                cardBody.appendChild(button);
+                card.appendChild(cardBody);
+                col.appendChild(card);
+
+                // Append card to container
+                container.appendChild(col);
+            });
+        }
+    </script>
+</body>
+</html>
